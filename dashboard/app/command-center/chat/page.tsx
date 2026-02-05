@@ -26,7 +26,7 @@ export default function ChatPage() {
 
   const fetchActivity = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/activity?type=message&limit=100`);
+      const response = await fetch(`${API_URL}/api/activity?limit=100`);
       const data = await response.json();
       setActivity(data.data || []);
       setLoading(false);

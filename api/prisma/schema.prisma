@@ -113,13 +113,20 @@ model Task {
   priority      String    @default("medium")  // "low", "medium", "high", "urgent"
   
   agentId       String?   // Owner agent
+  assignedTo    String?   // Phase 2: Current assignee
   projectId     String?
   cronJobId     String?   // Link to cron if recurring
   createdBy     String?
+  parentTaskId  String?   // For subtasks
   
   progress      Int       @default(0) // 0-100
   dueDate       DateTime?
   completedAt   DateTime?
+  assignedAt    DateTime?  // Phase 2: When assigned
+  startedAt     DateTime?  // Phase 2: When work started
+  
+  blockedReason String?    // Phase 2: Why blocked
+  helpRequested Boolean   @default(false) // Phase 2: Needs help
   
   tags          String[]  @default([])
   metadata      Json      @default("{}")
@@ -131,7 +138,9 @@ model Task {
   
   @@index([status])
   @@index([agentId])
+  @@index([assignedTo])
   @@index([projectId])
+  @@index([helpRequested])
 }
 
 // Activity Log
@@ -150,5 +159,100 @@ model ActivityLog {
   
   @@index([type])
   @@index([agentId])
+  @@index([createdAt])
+}
+
+// Phase 1: Agent-to-Agent Messaging
+model AgentMessage {
+  id               String    @id @default(uuid())
+  fromAgentId      String
+  toAgentId        String?   // NULL for broadcast
+  threadId         String?   // For threaded conversations
+  
+  message          String
+  messageType      String    @default("message") // "message", "question", "help_request", "announcement", "decision"
+  priority         String    @default("normal")  // "low", "normal", "high", "urgent"
+  
+  mentions         String[]  @default([]) // Array of @mentioned agent IDs
+  attachments      Json      @default("[]")
+  readBy           String[]  @default([]) // Array of agent IDs who read
+  reactions        Json      @default("{}") // {emoji: [agent_ids]}
+  
+  parentMessageId  String?   // For replies
+  
+  metadata         Json      @default("{}")
+  
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  
+  @@index([fromAgentId])
+  @@index([toAgentId])
+  @@index([threadId])
+  @@index([createdAt])
+  @@index([messageType])
+  @@index([priority])
+}
+
+// Phase 4: Council Proposals
+model CouncilProposal {
+  id               String    @id @default(uuid())
+  title            String
+  description      String
+  proposedBy       String
+  projectId        String?
+  
+  proposalType     String    @default("decision") // "decision", "policy", "architecture", "priority"
+  status           String    @default("open")     // "open", "voting", "deliberating", "approved", "rejected", "withdrawn"
+  
+  requiredVotes    Int       @default(3)          // Minimum votes needed
+  voteThreshold    Float     @default(0.6)        // % approval needed (0.6 = 60%)
+  votingClosesAt   DateTime?
+  
+  metadata         Json      @default("{}")
+  
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  resolvedAt       DateTime?
+  
+  votes            CouncilVote[]
+  discussions      CouncilDiscussion[]
+  
+  @@index([proposedBy])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Phase 4: Council Votes
+model CouncilVote {
+  id         String    @id @default(uuid())
+  proposalId String
+  agentId    String
+  vote       String    // "approve", "reject", "abstain"
+  reasoning  String?
+  weight     Float     @default(1.0) // Vote weight for weighted voting
+  
+  createdAt  DateTime  @default(now())
+  
+  proposal   CouncilProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  
+  @@unique([proposalId, agentId])
+  @@index([proposalId])
+  @@index([agentId])
+}
+
+// Phase 4: Council Discussions
+model CouncilDiscussion {
+  id             String    @id @default(uuid())
+  proposalId     String
+  agentId        String
+  message        String
+  discussionType String    @default("comment") // "comment", "concern", "support", "question"
+  parentId       String?   // For threaded discussions
+  
+  createdAt      DateTime  @default(now())
+  
+  proposal       CouncilProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  
+  @@index([proposalId])
   @@index([createdAt])
 }
