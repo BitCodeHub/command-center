@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Agent status tracking
+model AgentStatus {
+  id          String   @id @default(uuid())
+  agentId     String   @unique
+  name        String
+  role        String
+  emoji       String
+  department  String?
+  location    String   // "Mac Studio HQ" or "Luna Labs VPS"
+  
+  status      String   // "working", "idle", "blocked", "completed"
+  currentTask String?
+  progress    Int?     // 0-100
+  blockers    String[] @default([])
+  
+  lastUpdate  DateTime @default(now())
+  metadata    Json     @default("{}")
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  statusHistory StatusHistory[]
+  
+  @@index([agentId])
+  @@index([department])
+  @@index([status])
+  @@index([location])
+}
+
+// Status change history
+model StatusHistory {
+  id            String   @id @default(uuid())
+  agentStatusId String
+  agentId       String
+  
+  status        String
+  currentTask   String?
+  progress      Int?
+  blockers      String[] @default([])
+  
+  timestamp     DateTime @default(now())
+  metadata      Json     @default("{}")
+  
+  agentStatus   AgentStatus @relation(fields: [agentStatusId], references: [id], onDelete: Cascade)
+  
+  @@index([agentId])
+  @@index([timestamp])
+}
+
+// Projects
+model Project {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  owner         String   // agentId of owner
+  status        String   // "planned", "in_progress", "blocked", "completed"
+  progress      Int      @default(0) // 0-100
+  
+  nextMilestone String?
+  blockers      String[] @default([])
+  
+  startDate     DateTime?
+  targetDate    DateTime?
+  completedDate DateTime?
+  
+  metadata      Json     @default("{}")
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([owner])
+  @@index([status])
+}
+
+// Departments/Teams
+model Department {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  headAgentId String?  // Department head agent ID
+  location    String   // "Mac Studio HQ" or "Luna Labs VPS"
+  
+  agentCount  Int      @default(0)
+  
+  metadata    Json     @default("{}")
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([name])
+}
