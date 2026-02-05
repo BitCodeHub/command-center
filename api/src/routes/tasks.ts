@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { broadcastStatusUpdate } from '../index';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -130,6 +131,14 @@ router.post('/', async (req: Request, res: Response) => {
       },
     });
     
+    // 📡 Broadcast new task via WebSocket
+    broadcastStatusUpdate({
+      type: 'task_update',
+      taskId: task.id,
+      task,
+      action: 'created'
+    });
+    
     res.status(201).json({
       success: true,
       data: task,
@@ -206,6 +215,15 @@ router.patch('/:id', async (req: Request, res: Response) => {
         },
       });
     }
+    
+    // 📡 Broadcast task update via WebSocket
+    broadcastStatusUpdate({
+      type: 'task_update',
+      taskId: task.id,
+      task,
+      action: 'updated',
+      changes: { status, progress, agentId }
+    });
     
     res.json({
       success: true,
