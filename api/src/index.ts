@@ -15,6 +15,8 @@ import agentsRoutes from './routes/agents';
 import tasksRoutes from './routes/tasks';
 import activityRoutes from './routes/activity';
 import statsRoutes from './routes/stats';
+import messagesRoutes from './routes/messages';
+import councilRoutes from './routes/council';
 
 dotenv.config();
 
@@ -36,6 +38,8 @@ app.use('/api/agents', agentsRoutes);
 app.use('/api/tasks', tasksRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/messages', messagesRoutes);
+app.use('/api/council', councilRoutes);
 app.use('/health', healthRoutes);
 
 // Root
