@@ -174,23 +174,7 @@ export default function CommandCenterTasks() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-6">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-purple-400">Lumen AI</h1>
-        <div className="flex items-center gap-6 mt-4 text-sm text-gray-400">
-          <button className="text-white font-bold border-b-2 border-purple-500 pb-1">Tasks</button>
-          <button className="hover:text-white">Chat</button>
-          <button className="hover:text-white">Council</button>
-          <button className="hover:text-white">Calendar</button>
-          <button className="hover:text-white">Projects</button>
-          <button className="hover:text-white">Memory</button>
-          <button className="hover:text-white">Captures</button>
-          <button className="hover:text-white">Docs</button>
-          <button className="hover:text-white">People</button>
-          <button className="hover:text-white">Search</button>
-        </div>
-      </div>
+    <div>
 
       {/* Stats Bar */}
       {stats && (
