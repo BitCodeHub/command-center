@@ -10,6 +10,8 @@ import teamsRoutes from './routes/teams';
 import projectsRoutes from './routes/projects';
 import healthRoutes from './routes/health';
 import adminRoutes from './routes/admin';
+import departmentsRoutes from './routes/departments';
+import agentsRoutes from './routes/agents';
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use('/api/status', statusRoutes);
 app.use('/api/teams', teamsRoutes);
 app.use('/api/projects', projectsRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/departments', departmentsRoutes);
+app.use('/api/agents', agentsRoutes);
 app.use('/health', healthRoutes);
 
 // Root
