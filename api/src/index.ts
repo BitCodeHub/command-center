@@ -9,6 +9,7 @@ import statusRoutes from './routes/status';
 import teamsRoutes from './routes/teams';
 import projectsRoutes from './routes/projects';
 import healthRoutes from './routes/health';
+import adminRoutes from './routes/admin';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use('/api/status', statusRoutes);
 app.use('/api/teams', teamsRoutes);
 app.use('/api/projects', projectsRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/health', healthRoutes);
 
 // Root
