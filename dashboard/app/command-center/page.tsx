@@ -142,6 +142,7 @@ export default function CommandCenterTasks() {
     recurring: tasks.filter(t => t.status === 'recurring'),
     backlog: tasks.filter(t => t.status === 'backlog'),
     progress: tasks.filter(t => t.status === 'progress'),
+    done: tasks.filter(t => t.status === 'done'),
   };
 
   const priorityColor = (priority: string) => {
@@ -232,7 +233,7 @@ export default function CommandCenterTasks() {
       </div>
 
       {/* Kanban Board + Activity Feed */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-5 gap-4">
         {/* Recurring Column */}
         <div className="bg-gray-900 rounded-lg p-4">
           <div className="flex items-center justify-between mb-4">
@@ -313,6 +314,29 @@ export default function CommandCenterTasks() {
                   </div>
                 )}
                 <div className="text-xs text-gray-500">{task.project?.name || task.agentId} · {timeAgo(task.createdAt)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Done Column */}
+        <div className="bg-gray-900 rounded-lg p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold">Done</h2>
+            <span className="text-sm text-gray-400">{tasksByStatus.done.length}</span>
+          </div>
+          <div className="space-y-3">
+            {tasksByStatus.done.map(task => (
+              <div key={task.id} className="bg-gray-800 rounded-lg p-3 opacity-60">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="text-green-500 text-sm">✓</div>
+                  <button onClick={() => deleteTask(task.id)} className="text-gray-500 hover:text-red-500 text-xs">×</button>
+                </div>
+                <div className="font-bold text-sm mb-1 line-through">{task.title}</div>
+                {task.description && (
+                  <div className="text-xs text-gray-400 mb-2 line-clamp-2">{task.description}</div>
+                )}
+                <div className="text-xs text-gray-500">{task.project?.name || task.agentId} · {timeAgo(task.updatedAt)}</div>
               </div>
             ))}
           </div>
