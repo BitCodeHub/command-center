@@ -48,25 +48,25 @@ export default function DocsPage() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="bg-gray-900 rounded-lg p-8">
+      <div className="bg-[#111113] rounded-lg p-8">
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">📚</div>
           <h2 className="text-2xl font-bold mb-2">Documentation</h2>
-          <p className="text-gray-400">
+          <p className="text-[#a1a1aa]">
             Central repository for all system documentation
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {docCategories.map((category, i) => (
-            <div key={i} className="bg-gray-800 rounded-lg p-6">
+            <div key={i} className="bg-[#18181b] rounded-lg p-6">
               <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
                 <span>{category.icon}</span>
                 <span>{category.name}</span>
               </h3>
               <ul className="space-y-2">
                 {category.items.map((item, j) => (
-                  <li key={j} className="text-sm text-gray-400 hover:text-white cursor-pointer transition-colors">
+                  <li key={j} className="text-sm text-[#a1a1aa] hover:text-white cursor-pointer transition-colors">
                     → {item}
                   </li>
                 ))}
@@ -76,17 +76,17 @@ export default function DocsPage() {
         </div>
 
         <div className="mt-8 grid grid-cols-3 gap-4">
-          <div className="bg-gray-800 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-purple-400">50+</div>
-            <div className="text-xs text-gray-400 mt-1">Documentation Files</div>
+          <div className="bg-[#18181b] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[#6366f1]">50+</div>
+            <div className="text-xs text-[#a1a1aa] mt-1">Documentation Files</div>
           </div>
-          <div className="bg-gray-800 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-purple-400">10+</div>
-            <div className="text-xs text-gray-400 mt-1">Active Skills</div>
+          <div className="bg-[#18181b] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[#6366f1]">10+</div>
+            <div className="text-xs text-[#a1a1aa] mt-1">Active Skills</div>
           </div>
-          <div className="bg-gray-800 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-purple-400">147</div>
-            <div className="text-xs text-gray-400 mt-1">Agent Profiles</div>
+          <div className="bg-[#18181b] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[#6366f1]">147</div>
+            <div className="text-xs text-[#a1a1aa] mt-1">Agent Profiles</div>
           </div>
         </div>
 

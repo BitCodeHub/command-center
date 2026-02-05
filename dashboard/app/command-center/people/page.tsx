@@ -90,28 +90,28 @@ export default function PeoplePage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-400">Loading people...</div>;
+    return <div className="text-center py-12 text-[#a1a1aa]">Loading people...</div>;
   }
 
   return (
     <div>
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <div className="bg-gray-900 rounded-lg p-4">
+        <div className="bg-[#111113] rounded-lg p-4">
           <div className="text-2xl font-bold">{agents.length}</div>
-          <div className="text-sm text-gray-400">Total Agents</div>
+          <div className="text-sm text-[#a1a1aa]">Total Agents</div>
         </div>
-        <div className="bg-gray-900 rounded-lg p-4">
+        <div className="bg-[#111113] rounded-lg p-4">
           <div className="text-2xl font-bold">{departments.length}</div>
-          <div className="text-sm text-gray-400">Departments</div>
+          <div className="text-sm text-[#a1a1aa]">Departments</div>
         </div>
-        <div className="bg-gray-900 rounded-lg p-4">
+        <div className="bg-[#111113] rounded-lg p-4">
           <div className="text-2xl font-bold">{agentsByLocation['Mac Studio HQ'].length}</div>
-          <div className="text-sm text-gray-400">Mac Studio HQ</div>
+          <div className="text-sm text-[#a1a1aa]">Mac Studio HQ</div>
         </div>
-        <div className="bg-gray-900 rounded-lg p-4">
+        <div className="bg-[#111113] rounded-lg p-4">
           <div className="text-2xl font-bold">{agentsByLocation['Luna Labs VPS'].length}</div>
-          <div className="text-sm text-gray-400">Luna Labs VPS</div>
+          <div className="text-sm text-[#a1a1aa]">Luna Labs VPS</div>
         </div>
       </div>
 
@@ -122,12 +122,12 @@ export default function PeoplePage() {
           placeholder="Search agents..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 bg-gray-900 rounded-lg px-4 py-2 text-sm"
+          className="flex-1 bg-[#111113] rounded-lg px-4 py-2 text-sm"
         />
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="bg-gray-900 rounded-lg px-4 py-2 text-sm"
+          className="bg-[#111113] rounded-lg px-4 py-2 text-sm"
         >
           <option value="all">All Departments</option>
           {departments.map((dept) => (
@@ -150,9 +150,9 @@ export default function PeoplePage() {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h2 className="text-xl font-bold">{dept.name}</h2>
-                  <p className="text-sm text-gray-400">{dept.description}</p>
+                  <p className="text-sm text-[#a1a1aa]">{dept.description}</p>
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-[#71717a]">
                   {deptAgents.length} agent{deptAgents.length !== 1 ? 's' : ''}
                 </div>
               </div>
@@ -161,37 +161,37 @@ export default function PeoplePage() {
                 {deptAgents.map((agent) => (
                   <div
                     key={agent.id}
-                    className="bg-gray-900 rounded-lg p-4 hover:bg-gray-800 transition-colors"
+                    className="bg-[#111113] rounded-lg p-4 hover:bg-[#18181b] transition-colors"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">{agent.emoji}</span>
                         <div>
                           <div className="font-bold">{agent.name}</div>
-                          <div className="text-xs text-gray-400">{agent.role}</div>
+                          <div className="text-xs text-[#a1a1aa]">{agent.role}</div>
                         </div>
                       </div>
                       <div className={`w-3 h-3 rounded-full ${statusColor(agent.status)}`} />
                     </div>
 
                     {agent.currentTask && (
-                      <div className="text-sm text-gray-400 mb-2">
+                      <div className="text-sm text-[#a1a1aa] mb-2">
                         📋 {agent.currentTask}
                       </div>
                     )}
 
                     {agent.progress !== undefined && agent.progress > 0 && (
                       <div className="mb-2">
-                        <div className="bg-gray-700 rounded-full h-1.5">
+                        <div className="bg-[#27272a] rounded-full h-1.5">
                           <div
-                            className="bg-purple-500 rounded-full h-1.5"
+                            className="bg-[#6366f1] rounded-full h-1.5"
                             style={{ width: `${agent.progress}%` }}
                           />
                         </div>
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
+                    <div className="flex items-center justify-between text-xs text-[#71717a] mt-2">
                       <span>{agent.location === 'Mac Studio HQ' ? '🏢 HQ' : '☁️ VPS'}</span>
                       <span className="capitalize">{agent.status}</span>
                     </div>
@@ -203,7 +203,7 @@ export default function PeoplePage() {
         })}
 
       {filteredAgents.length === 0 && (
-        <div className="text-center py-12 text-gray-500">No agents found</div>
+        <div className="text-center py-12 text-[#71717a]">No agents found</div>
       )}
     </div>
   );

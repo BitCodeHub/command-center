@@ -127,8 +127,8 @@ export default function SearchPage() {
       case 'task': return 'bg-purple-900 text-purple-300';
       case 'project': return 'bg-blue-900 text-blue-300';
       case 'agent': return 'bg-green-900 text-green-300';
-      case 'activity': return 'bg-gray-800 text-gray-400';
-      default: return 'bg-gray-800 text-gray-400';
+      case 'activity': return 'bg-[#18181b] text-[#a1a1aa]';
+      default: return 'bg-[#18181b] text-[#a1a1aa]';
     }
   };
 
@@ -142,18 +142,18 @@ export default function SearchPage() {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             placeholder="Search tasks, projects, agents, activity..."
-            className="flex-1 bg-gray-900 rounded-lg px-6 py-4 text-lg"
+            className="flex-1 bg-[#111113] rounded-lg px-6 py-4 text-lg"
             autoFocus
           />
           <button
             onClick={handleSearch}
             disabled={searching}
-            className="bg-purple-600 hover:bg-purple-700 px-8 py-4 rounded-lg font-bold disabled:opacity-50"
+            className="bg-[#6366f1] hover:bg-[#4f46e5] px-8 py-4 rounded-lg font-bold disabled:opacity-50"
           >
             {searching ? 'Searching...' : 'Search'}
           </button>
         </div>
-        <div className="mt-4 text-sm text-gray-400">
+        <div className="mt-4 text-sm text-[#a1a1aa]">
           💡 Try searching for agent names, task titles, project names, or activities
         </div>
       </div>
@@ -161,7 +161,7 @@ export default function SearchPage() {
       {/* Results */}
       {results.length > 0 && (
         <div>
-          <div className="text-sm text-gray-400 mb-4">
+          <div className="text-sm text-[#a1a1aa] mb-4">
             Found {results.length} result{results.length !== 1 ? 's' : ''}
           </div>
 
@@ -169,7 +169,7 @@ export default function SearchPage() {
             {results.map((result) => (
               <div
                 key={`${result.type}-${result.id}`}
-                className="bg-gray-900 rounded-lg p-4 hover:bg-gray-800 transition-colors cursor-pointer"
+                className="bg-[#111113] rounded-lg p-4 hover:bg-[#18181b] transition-colors cursor-pointer"
               >
                 <div className="flex items-start gap-3">
                   <div className={`px-2 py-1 rounded text-xs font-bold ${typeColor(result.type)}`}>
@@ -178,13 +178,13 @@ export default function SearchPage() {
                   <div className="flex-1">
                     <div className="font-bold mb-1">{result.title}</div>
                     {result.description && (
-                      <div className="text-sm text-gray-400 mb-2">{result.description}</div>
+                      <div className="text-sm text-[#a1a1aa] mb-2">{result.description}</div>
                     )}
                     {result.metadata && (
-                      <div className="flex items-center gap-3 text-xs text-gray-500">
+                      <div className="flex items-center gap-3 text-xs text-[#71717a]">
                         {Object.entries(result.metadata).map(([key, value]) => (
                           <span key={key}>
-                            {key}: <span className="text-gray-400">{String(value)}</span>
+                            {key}: <span className="text-[#a1a1aa]">{String(value)}</span>
                           </span>
                         ))}
                       </div>
@@ -198,15 +198,15 @@ export default function SearchPage() {
       )}
 
       {results.length === 0 && query && !searching && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-[#71717a]">
           No results found for &quot;{query}&quot;
         </div>
       )}
 
       {!query && (
-        <div className="bg-gray-900 rounded-lg p-8 text-center">
+        <div className="bg-[#111113] rounded-lg p-8 text-center">
           <div className="text-4xl mb-4">🔍</div>
-          <p className="text-gray-400">
+          <p className="text-[#a1a1aa]">
             Search across all tasks, projects, agents, and activity
           </p>
         </div>

@@ -24,10 +24,10 @@ export default function CommandCenterLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-[#0a0a0b] text-[#fafafa]">
       {/* Header */}
-      <div className="border-b border-gray-800 px-6 py-4">
-        <h1 className="text-3xl font-bold text-purple-400 mb-4">Lumen AI</h1>
+      <div className="border-b border-[#27272a] px-6 py-4 bg-[#111113]">
+        <h1 className="text-3xl font-bold text-[#6366f1] mb-4">Lumen AI</h1>
         <div className="flex items-center gap-6 text-sm">
           {tabs.map((tab) => {
             const isActive = pathname === tab.path || (tab.path !== '/command-center' && pathname.startsWith(tab.path));
@@ -37,8 +37,8 @@ export default function CommandCenterLayout({
                 href={tab.path}
                 className={`pb-1 transition-colors ${
                   isActive
-                    ? 'text-white font-bold border-b-2 border-purple-500'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'text-[#fafafa] font-bold border-b-2 border-[#6366f1]'
+                    : 'text-[#71717a] hover:text-[#fafafa]'
                 }`}
               >
                 {tab.name}

@@ -48,35 +48,35 @@ export default function ChatPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-400">Loading conversations...</div>;
+    return <div className="text-center py-12 text-[#a1a1aa]">Loading conversations...</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-gray-900 rounded-lg">
-        <div className="border-b border-gray-800 p-4">
+      <div className="bg-[#111113] rounded-lg">
+        <div className="border-b border-[#27272a] p-4">
           <h2 className="text-xl font-bold">Agent Conversations</h2>
-          <p className="text-sm text-gray-400 mt-1">Real-time activity from all agents</p>
+          <p className="text-sm text-[#a1a1aa] mt-1">Real-time activity from all agents</p>
         </div>
 
         <div className="divide-y divide-gray-800">
           {activity.length === 0 && (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center text-[#71717a]">
               No recent conversations
             </div>
           )}
 
           {activity.map((item) => (
-            <div key={item.id} className="p-4 hover:bg-gray-800 transition-colors">
+            <div key={item.id} className="p-4 hover:bg-[#18181b] transition-colors">
               <div className="flex items-start gap-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-bold">{item.agentId || 'System'}</span>
-                    <span className="text-xs text-gray-500">{timeAgo(item.createdAt)}</span>
+                    <span className="text-xs text-[#71717a]">{timeAgo(item.createdAt)}</span>
                   </div>
                   <div className="text-gray-300">{item.title}</div>
                   {item.description && (
-                    <div className="text-sm text-gray-400 mt-1">{item.description}</div>
+                    <div className="text-sm text-[#a1a1aa] mt-1">{item.description}</div>
                   )}
                 </div>
               </div>
@@ -85,7 +85,7 @@ export default function ChatPage() {
         </div>
       </div>
 
-      <div className="mt-6 p-4 bg-gray-900 rounded-lg text-center text-gray-500 text-sm">
+      <div className="mt-6 p-4 bg-[#111113] rounded-lg text-center text-[#71717a] text-sm">
         💬 Full chat interface coming soon
       </div>
     </div>
