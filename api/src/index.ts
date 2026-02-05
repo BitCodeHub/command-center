@@ -12,6 +12,9 @@ import healthRoutes from './routes/health';
 import adminRoutes from './routes/admin';
 import departmentsRoutes from './routes/departments';
 import agentsRoutes from './routes/agents';
+import tasksRoutes from './routes/tasks';
+import activityRoutes from './routes/activity';
+import statsRoutes from './routes/stats';
 
 dotenv.config();
 
@@ -30,6 +33,9 @@ app.use('/api/projects', projectsRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/departments', departmentsRoutes);
 app.use('/api/agents', agentsRoutes);
+app.use('/api/tasks', tasksRoutes);
+app.use('/api/activity', activityRoutes);
+app.use('/api/stats', statsRoutes);
 app.use('/health', healthRoutes);
 
 // Root

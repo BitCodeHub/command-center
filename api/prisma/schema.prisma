@@ -60,9 +60,12 @@ model StatusHistory {
 model Project {
   id            String   @id @default(uuid())
   name          String   @unique
+  code          String?  @unique // e.g., "p3-019"
+  description   String?
   owner         String   // agentId of owner
-  status        String   // "planned", "in_progress", "blocked", "completed"
+  status        String   // "active", "paused", "completed", "archived"
   progress      Int      @default(0) // 0-100
+  location      String?  // File path
   
   nextMilestone String?
   blockers      String[] @default([])
@@ -71,10 +74,13 @@ model Project {
   targetDate    DateTime?
   completedDate DateTime?
   
+  tags          String[] @default([])
   metadata      Json     @default("{}")
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  
+  tasks         Task[]
   
   @@index([owner])
   @@index([status])
@@ -96,4 +102,53 @@ model Department {
   updatedAt   DateTime @updatedAt
   
   @@index([name])
+}
+
+// Tasks (Command Center)
+model Task {
+  id            String    @id @default(uuid())
+  title         String
+  description   String?
+  status        String    @default("backlog") // "recurring", "backlog", "progress", "done"
+  priority      String    @default("medium")  // "low", "medium", "high", "urgent"
+  
+  agentId       String?   // Owner agent
+  projectId     String?
+  cronJobId     String?   // Link to cron if recurring
+  createdBy     String?
+  
+  progress      Int       @default(0) // 0-100
+  dueDate       DateTime?
+  completedAt   DateTime?
+  
+  tags          String[]  @default([])
+  metadata      Json      @default("{}")
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  project       Project?  @relation(fields: [projectId], references: [id])
+  
+  @@index([status])
+  @@index([agentId])
+  @@index([projectId])
+}
+
+// Activity Log
+model ActivityLog {
+  id          String   @id @default(uuid())
+  type        String   // "task", "commit", "message", "project", "agent", "system"
+  agentId     String?
+  projectId   String?
+  taskId      String?
+  
+  title       String
+  description String?
+  metadata    Json     @default("{}")
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([type])
+  @@index([agentId])
+  @@index([createdAt])
 }
