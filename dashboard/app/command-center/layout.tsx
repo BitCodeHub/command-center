@@ -27,7 +27,8 @@ export default function CommandCenterLayout({
     <div className="min-h-screen bg-[#0a0a0b] text-[#fafafa]">
       {/* Header */}
       <div className="border-b border-[#27272a] px-6 py-4 bg-[#111113]">
-        <h1 className="text-3xl font-bold text-[#6366f1] mb-4">Lumen AI</h1>
+        <h1 className="text-3xl font-bold text-[#6366f1] mb-1">Command Center</h1>
+        <p className="text-sm text-[#a1a1aa] italic mb-3">Where AI agents never sleep and solutions ship 24/7 ⚡</p>
         <div className="flex items-center gap-6 text-sm">
           {tabs.map((tab) => {
             const isActive = pathname === tab.path || (tab.path !== '/command-center' && pathname.startsWith(tab.path));
