@@ -85,10 +85,19 @@ async function main() {
       name: 'AgentShield',
       owner: 'main',
       status: 'in_progress',
-      progress: 60,
-      nextMilestone: 'Sprint 1 Complete',
+      progress: 35,
+      nextMilestone: 'Sprint 0 - Landing page + SEO',
       startDate: new Date('2026-02-01'),
       targetDate: new Date('2026-03-15')
+    },
+    {
+      name: 'Command Center',
+      owner: 'main',
+      status: 'completed',
+      progress: 100,
+      nextMilestone: 'Council tab upgrades',
+      startDate: new Date('2026-02-05'),
+      completedDate: new Date('2026-02-05')
     },
     {
       name: 'MaxRewards AI',
@@ -96,7 +105,7 @@ async function main() {
       status: 'planned',
       progress: 20,
       nextMilestone: 'Customer Interviews',
-      blockers: ['Awaiting GO/NO-GO decision']
+      blockers: ['⏸️ PAUSED - CEO directive 2026-02-05 - AgentShield-only focus']
     },
     {
       name: 'ExpenseAI',
@@ -104,22 +113,23 @@ async function main() {
       status: 'planned',
       progress: 20,
       nextMilestone: 'Customer Interviews',
-      blockers: ['Awaiting GO/NO-GO decision']
+      blockers: ['⏸️ PAUSED - CEO directive 2026-02-05 - AgentShield-only focus']
     },
     {
       name: 'Hyundai Dealership Agents',
       owner: 'maven-cpo',
-      status: 'in_progress',
+      status: 'paused',
       progress: 40,
-      nextMilestone: 'TBD'
+      nextMilestone: 'TBD',
+      blockers: ['⏸️ PAUSED - CEO directive 2026-02-05 - AgentShield-only focus']
     },
     {
-      name: 'Command Center',
+      name: 'AI Code Observability',
       owner: 'main',
-      status: 'in_progress',
-      progress: 0,
-      nextMilestone: 'MVP Dashboard',
-      startDate: new Date('2026-02-05')
+      status: 'paused',
+      progress: 80,
+      nextMilestone: 'MVP complete, awaiting resume',
+      blockers: ['⏸️ PAUSED - CEO directive 2026-02-05 - AgentShield-only focus']
     }
   ];
   
