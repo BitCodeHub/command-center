@@ -50,19 +50,21 @@ export default function ProjectsPage() {
 
   const statusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-600';
+      case 'active':
+      case 'in_progress': return 'bg-green-600';
       case 'paused': return 'bg-yellow-600';
       case 'completed': return 'bg-blue-600';
+      case 'planned':
       case 'archived': return 'bg-gray-600';
       default: return 'bg-gray-600';
     }
   };
 
   const projectsByStatus = {
-    active: projects.filter(p => p.status === 'active'),
+    active: projects.filter(p => p.status === 'active' || p.status === 'in_progress'),
     paused: projects.filter(p => p.status === 'paused'),
     completed: projects.filter(p => p.status === 'completed'),
-    archived: projects.filter(p => p.status === 'archived'),
+    archived: projects.filter(p => p.status === 'archived' || p.status === 'planned'),
   };
 
   if (loading) {

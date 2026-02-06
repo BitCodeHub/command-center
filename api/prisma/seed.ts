@@ -116,14 +116,6 @@ async function main() {
       blockers: ['⏸️ PAUSED - CEO directive 2026-02-05 - AgentShield-only focus']
     },
     {
-      name: 'Hyundai Dealership Agents',
-      owner: 'maven-cpo',
-      status: 'paused',
-      progress: 40,
-      nextMilestone: 'TBD',
-      blockers: ['⏸️ PAUSED - CEO directive 2026-02-05 - AgentShield-only focus']
-    },
-    {
       name: 'AI Code Observability',
       owner: 'main',
       status: 'paused',

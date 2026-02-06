@@ -24,8 +24,39 @@ export default function CouncilPage() {
 
   useEffect(() => {
     fetchAgents();
-    const interval = setInterval(fetchAgents, 5000);
-    return () => clearInterval(interval);
+    
+    // WebSocket for instant updates
+    const ws = new WebSocket('wss://command-center-api.onrender.com/api/status/stream');
+    
+    ws.onopen = () => {
+      console.log('✅ WebSocket connected (Council)');
+    };
+    
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'status_update') {
+          fetchAgents(); // Refresh instantly
+        }
+      } catch (error) {
+        console.error('WebSocket message error:', error);
+      }
+    };
+    
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+    
+    ws.onclose = () => {
+      console.log('WebSocket disconnected, reconnecting...');
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    };
+    
+    return () => {
+      ws.close();
+    };
   }, []);
 
   const fetchAgents = async () => {

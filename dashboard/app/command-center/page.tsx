@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://command-center-api.onrender.com';
 
+// AgentShield project ID (only active project)
+const AGENTSHIELD_PROJECT_ID = '8507fae0-6cb3-4f51-9ba4-2993717bef38';
+
 interface Task {
   id: string;
   title: string;
@@ -39,10 +42,20 @@ interface Stats {
   activeProjects: number;
 }
 
+interface Agent {
+  id: string;
+  agentId: string;
+  name: string;
+  emoji: string;
+  status: string;
+}
+
 export default function CommandCenterTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [activity, setActivity] = useState<Activity[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [selectedAgent, setSelectedAgent] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [newTask, setNewTask] = useState({
@@ -56,26 +69,67 @@ export default function CommandCenterTasks() {
   useEffect(() => {
     fetchData();
     
-    // Poll for updates every 30 seconds
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
+    // WebSocket for instant updates
+    const ws = new WebSocket('wss://command-center-api.onrender.com/api/status/stream');
+    
+    ws.onopen = () => {
+      console.log('✅ WebSocket connected (Tasks)');
+    };
+    
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log('📡 WebSocket message:', data);
+        if (data.type === 'status_update' || data.type === 'task_update') {
+          console.log('🔄 Refreshing data...');
+          fetchData(); // Refresh on any update
+        }
+      } catch (error) {
+        console.error('WebSocket message error:', error);
+      }
+    };
+    
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+    
+    ws.onclose = () => {
+      console.log('WebSocket disconnected, reconnecting...');
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    };
+    
+    // Polling fallback: refresh every 10 seconds
+    const pollInterval = setInterval(() => {
+      console.log('⏱️ Polling refresh...');
+      fetchData();
+    }, 10000);
+    
+    return () => {
+      ws.close();
+      clearInterval(pollInterval);
+    };
   }, []);
 
   const fetchData = async () => {
     try {
-      const [tasksRes, activityRes, statsRes] = await Promise.all([
-        fetch(`${API_URL}/api/tasks`),
-        fetch(`${API_URL}/api/activity?limit=20`),
+      const [tasksRes, activityRes, statsRes, agentsRes] = await Promise.all([
+        fetch(`${API_URL}/api/tasks?projectId=${AGENTSHIELD_PROJECT_ID}`),
+        fetch(`${API_URL}/api/activity?projectId=${AGENTSHIELD_PROJECT_ID}&limit=20`),
         fetch(`${API_URL}/api/stats/company`),
+        fetch(`${API_URL}/api/status`),
       ]);
 
       const tasksData = await tasksRes.json();
       const activityData = await activityRes.json();
       const statsData = await statsRes.json();
+      const agentsData = await agentsRes.json();
 
       setTasks(tasksData.data || []);
       setActivity(activityData.data || []);
       setStats(statsData.data || null);
+      setAgents(agentsData.statuses || []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -93,6 +147,7 @@ export default function CommandCenterTasks() {
         body: JSON.stringify({
           ...newTask,
           createdBy: 'main',
+          projectId: AGENTSHIELD_PROJECT_ID, // Always AgentShield
         }),
       });
 
@@ -138,11 +193,16 @@ export default function CommandCenterTasks() {
     }
   };
 
+  // Filter tasks by selected agent
+  const filteredTasks = selectedAgent === 'all' 
+    ? tasks 
+    : tasks.filter(t => t.agentId === selectedAgent);
+
   const tasksByStatus = {
-    recurring: tasks.filter(t => t.status === 'recurring'),
-    backlog: tasks.filter(t => t.status === 'backlog'),
-    progress: tasks.filter(t => t.status === 'progress'),
-    done: tasks.filter(t => t.status === 'done'),
+    recurring: filteredTasks.filter(t => t.status === 'recurring'),
+    backlog: filteredTasks.filter(t => t.status === 'backlog'),
+    progress: filteredTasks.filter(t => t.status === 'progress'),
+    done: filteredTasks.filter(t => t.status === 'done'),
   };
 
   const priorityColor = (priority: string) => {
@@ -206,14 +266,21 @@ export default function CommandCenterTasks() {
         >
           + New task
         </button>
-        <select className="bg-[#18181b] px-4 py-2 rounded-lg text-sm">
-          <option>Alex</option>
-          <option>Henry</option>
-          <option>All agents</option>
+        <select 
+          value={selectedAgent}
+          onChange={(e) => setSelectedAgent(e.target.value)}
+          className="bg-[#18181b] px-4 py-2 rounded-lg text-sm"
+        >
+          <option value="all">All agents ({agents.length})</option>
+          {agents.map(agent => (
+            <option key={agent.agentId} value={agent.agentId}>
+              {agent.emoji} {agent.name}
+            </option>
+          ))}
         </select>
-        <select className="bg-[#18181b] px-4 py-2 rounded-lg text-sm">
-          <option>All projects</option>
-        </select>
+        <div className="bg-[#18181b] px-4 py-2 rounded-lg text-sm">
+          🛡️ AgentShield (only active project)
+        </div>
       </div>
 
       {/* Kanban Board + Activity Feed */}

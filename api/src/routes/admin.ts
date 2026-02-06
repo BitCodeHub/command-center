@@ -1,9 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { PrismaClient } from '@prisma/client';
 
 const router = Router();
 const execAsync = promisify(exec);
+const prisma = new PrismaClient();
 
 // Admin endpoint to run migrations
 router.post('/migrate', async (req: Request, res: Response) => {
@@ -51,6 +53,44 @@ router.post('/seed', async (req: Request, res: Response) => {
     console.error('Seed error:', error);
     res.status(500).json({
       error: 'Seed failed',
+      message: error.message
+    });
+  }
+});
+
+// Admin endpoint to delete projects by name
+router.post('/delete-projects', async (req: Request, res: Response) => {
+  try {
+    const { projectNames } = req.body;
+    
+    if (!projectNames || !Array.isArray(projectNames)) {
+      return res.status(400).json({
+        error: 'projectNames array required'
+      });
+    }
+    
+    console.log('Deleting projects:', projectNames);
+    
+    const result = await prisma.project.deleteMany({
+      where: {
+        name: {
+          in: projectNames
+        }
+      }
+    });
+    
+    console.log(`Deleted ${result.count} projects`);
+    
+    res.json({
+      success: true,
+      message: `Deleted ${result.count} project(s)`,
+      deletedCount: result.count,
+      projectNames
+    });
+  } catch (error: any) {
+    console.error('Delete projects error:', error);
+    res.status(500).json({
+      error: 'Delete failed',
       message: error.message
     });
   }
